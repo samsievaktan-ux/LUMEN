@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ФрутМаркет — свежие фрукты и ягоды с доставкой</title>
+<style>
+  /* ==========================================================
+     ПЕРЕМЕННЫЕ: главная цветовая палитра магазина
+     ========================================================== */
+  :root {
+    --green-dark: #1f7a3d;
+    --green-main: #4caf50;
+    --green-light: #e8f7e5;
+    --orange-main: #ff8a3d;
+    --orange-dark: #f26522;
+    --yellow-main: #ffc93c;
+    --cream-bg: #fffdf7;
+    --text-dark: #22331f;
+    --text-muted: #6b7a63;
+    --white: #ffffff;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --shadow-soft: 0 10px 30px rgba(31, 122, 61, 0.12);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Segoe UI', 'Trebuchet MS', system-ui, sans-serif;
+    background: var(--cream-bg);
+    color: var(--text-dark);
+    line-height: 1.5;
+  }
+
+  a { text-decoration: none; color: inherit; }
+  ul { list-style: none; }
+  img { max-width: 100%; display: block; }
+
+  .container {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ==========================================================
+     ШАПКА САЙТА
+     ========================================================== */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    gap: 20px;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--green-dark);
+    white-space: nowrap;
+  }
+
+  .nav {
+    display: flex;
+    gap: 32px;
+  }
+
+  .nav a {
+    font-weight: 600;
+    color: var(--text-dark);
+    position: relative;
+    transition: color 0.2s ease;
+  }
+
+  .nav a:hover {
+    color: var(--orange-main);
+  }
+
+  .nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0;
+    height: 2px;
+    background: var(--orange-main);
+    transition: width 0.25s ease;
+  }
+
+  .nav a:hover::after {
+    width: 100%;
+  }
+
+  .cart-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    background: var(--green-light);
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .cart-icon:hover {
+    transform: scale(1.08);
+    background: var(--yellow-main);
+  }
+
+  .cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--orange-dark);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+  }
+
+  /* бургер-меню для мобильной версии */
+  .burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .burger span {
+    width: 26px;
+    height: 3px;
+    background: var(--green-dark);
+    border-radius: 2px;
+  }
+
+  /* ==========================================================
+     ГЛАВНЫЙ ЭКРАН (HERO)
+     ========================================================== */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    margin: 20px;
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(120deg, rgba(31,122,61,0.85) 0%, rgba(76,175,80,0.55) 55%, rgba(255,201,60,0.35) 100%),
+      url('https://source.unsplash.com/1600x700/?fruits,fresh') center/cover no-repeat;
+    color: var(--white);
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero__content {
+    padding: 60px 40px;
+    max-width: 620px;
+  }
+
+  .hero__eyebrow {
+    display: inline-block;
+    background: var(--yellow-main);
+    color: var(--text-dark);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 18px;
+    text-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+
+  .hero p {
+    font-size: 1.15rem;
+    margin-bottom: 30px;
+    max-width: 480px;
+    opacity: 0.95;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--orange-main);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 16px 38px;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255, 138, 61, 0.45);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background: var(--orange-dark);
+    transform: translateY(-3px) scale(1.03);
+  }
+
+  /* ==========================================================
+     КАТАЛОГ ТОВАРОВ
+     ========================================================== */
+  .section {
+    padding: 70px 20px;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 45px;
+    font-size: 1.05rem;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  .product-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 34px rgba(31, 122, 61, 0.2);
+  }
+
+  .product-card__image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  .product-card__body {
+    padding: 20px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+  }
+
+  .product-card__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+
+  .product-card__price {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--green-dark);
+  }
+
+  .product-card__price span {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .btn-add {
+    margin-top: auto;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green-main);
+    color: var(--white);
+    font-weight: 700;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .btn-add:hover {
+    background: var(--orange-main);
+    transform: scale(1.06);
+  }
+
+  /* ==========================================================
+     ПРЕИМУЩЕСТВА
+     ========================================================== */
+  .features {
+    background: var(--green-light);
+  }
+
+  .features-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .feature-card {
+    flex: 1 1 260px;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 32px 26px;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .feature-card__icon {
+    font-size: 2.6rem;
+    margin-bottom: 16px;
+  }
+
+  .feature-card__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--green-dark);
+  }
+
+  .feature-card__text {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  /* ==========================================================
+     ПОДВАЛ
+     ========================================================== */
+  .footer {
+    background: var(--green-dark);
+    color: var(--white);
+    padding: 50px 20px 24px;
+  }
+
+  .footer__inner {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: 1180px;
+    margin: 0 auto 30px;
+  }
+
+  .footer__col {
+    flex: 1 1 220px;
+  }
+
+  .footer__col h3 {
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+    color: var(--yellow-main);
+  }
+
+  .footer__col p, .footer__col li {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.92rem;
+    margin-bottom: 8px;
+  }
+
+  .footer__bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.65);
+  }
+
+  /* ==========================================================
+     АДАПТИВНОСТЬ
+     ========================================================== */
+  @media (max-width: 900px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .hero h1 { font-size: 2.3rem; }
+  }
+
+  @media (max-width: 640px) {
+    .nav { 
+      position: absolute;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 20px;
+      display: none;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .nav.open { display: flex; }
+    .burger { display: flex; }
+
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero__content { padding: 40px 24px; }
+    .hero h1 { font-size: 1.9rem; }
+    .hero p { font-size: 1rem; }
+    .features-grid { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ШАПКА -->
+  <header class="header">
+    <div class="header__inner">
+      <div class="logo">🍋 ФрутМаркет</div>
+
+      <nav class="nav" id="mainNav">
+        <a href="#catalog">Каталог</a>
+        <a href="#delivery">Доставка</a>
+        <a href="#reviews">Отзывы</a>
+      </nav>
+
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div class="cart-icon" title="Корзина">
+          🛒
+          <span class="cart-count" id="cartCount">0</span>
+        </div>
+        <!-- кнопка для мобильного меню -->
+        <button class="burger" id="burgerBtn" aria-label="Открыть меню">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ГЛАВНЫЙ ЭКРАН -->
+  <section class="hero">
+    <div class="hero__content">
+      <span class="hero__eyebrow">Сезонная свежесть каждый день</span>
+      <h1>Свежие фрукты с доставкой на дом</h1>
+      <p>Отбираем самые спелые фрукты и ягоды у проверенных фермеров и привозим их к вашей двери уже сегодня.</p>
+      <a href="#catalog" class="btn-primary">Выбрать фрукты</a>
+    </div>
+  </section>
+
+  <!-- КАТАЛОГ ТОВАРОВ -->
+  <section class="section" id="catalog">
+    <div class="container">
+      <h2 class="section-title">Наш каталог</h2>
+      <p class="section-subtitle">Свежесть, проверенная временем и вкусом</p>
+
+      <div class="product-grid">
+
+        <!-- Карточка 1 -->
+        <article class="product-card">
+          <img class="product-card__image" src="https://source.unsplash.com/400x300/?apple" alt="Яблоки Гала">
+          <div class="product-card__body">
+            <h3 class="product-card__title">Яблоки Гала</h3>
+            <p class="product-card__price">259 ₽ <span>/ 1 кг</span></p>
+            <button class="btn-add" onclick="addToCart()">В корзину 🧺</button>
+          </div>
+        </article>
+
+        <!-- Карточка 2 -->
+        <article class="product-card">
+          <img class="product-card__image" src="https://source.unsplash.com/400x300/?banana" alt="Спелые бананы">
+          <div class="product-card__body">
+            <h3 class="product-card__title">Спелые Бананы</h3>
+            <p class="product-card__price">129 ₽ <span>/ 1 кг</span></p>
+            <button class="btn-add" onclick="addToCart()">В корзину 🧺</button>
+          </div>
+        </article>
+
+        <!-- Карточка 3 -->
+        <article class="product-card">
+          <img class="product-card__image" src="https://source.unsplash.com/400x300/?mango" alt="Сочный манго">
+          <div class="product-card__body">
+            <h3 class="product-card__title">Сочный Манго</h3>
+            <p class="product-card__price">349 ₽ <span>/ 1 кг</span></p>
+            <button class="btn-add" onclick="addToCart()">В корзину 🧺</button>
+          </div>
+        </article>
+
+        <!-- Карточка 4 -->
+        <article class="product-card">
+          <img class="product-card__image" src="https://source.unsplash.com/400x300/?strawberry" alt="Клубника">
+          <div class="product-card__body">
+            <h3 class="product-card__title">Клубника садовая</h3>
+            <p class="product-card__price">449 ₽ <span>/ 1 кг</span></p>
+            <button class="btn-add" onclick="addToCart()">В корзину 🧺</button>
+          </div>
+        </article>
+
+        <!-- Карточка 5 -->
+        <article class="product-card">
+          <img class="product-card__image" src="https://source.unsplash.com/400x300/?orange,fruit" alt="Апельсины">
+          <div class="product-card__body">
+            <h3 class="product-card__title">Апельсины сладкие</h3>
+            <p class="product-card__price">179 ₽ <span>/ 1 кг</span></p>
+            <button class="btn-add" onclick="addToCart()">В корзину 🧺</button>
+          </div>
+        </article>
+
+        <!-- Карточка 6 -->
+        <article class="product-card">
+          <img class="product-card__image" src="https://source.unsplash.com/400x300/?blueberry" alt="Черника">
+          <div class="product-card__body">
+            <h3 class="product-card__title">Черника лесная</h3>
+            <p class="product-card__price">519 ₽ <span>/ 1 кг</span></p>
+            <button class="btn-add" onclick="addToCart()">В корзину 🧺</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРЕИМУЩЕСТВА -->
+  <section class="section features" id="delivery">
+    <div class="container">
+      <h2 class="section-title">Почему выбирают нас</h2>
+      <p class="section-subtitle">Три причины сделать заказ прямо сейчас</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-card__icon">🌱</div>
+          <h3 class="feature-card__title">Только свежее</h3>
+          <p class="feature-card__text">Собираем урожай не более чем за 24 часа до отправки заказа покупателю.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">🚚</div>
+          <h3 class="feature-card__title">Быстрая доставка</h3>
+          <p class="feature-card__text">Привозим заказ в течение 2 часов по всему городу в удобное для вас время.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">✅</div>
+          <h3 class="feature-card__title">Гарантия качества</h3>
+          <p class="feature-card__text">Если фрукты не понравились — вернём деньги или заменим товар без вопросов.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПОДВАЛ -->
+  <footer class="footer" id="reviews">
+    <div class="footer__inner">
+      <div class="footer__col">
+        <h3>🍋 ФрутМаркет</h3>
+        <p>Свежие фрукты и ягоды с доставкой по всему городу с 2019 года.</p>
+      </div>
+
+      <div class="footer__col">
+        <h3>Контакты</h3>
+        <p>Телефон: +7 (900) 123-45-67</p>
+        <p>Email: hello@frutmarket.ru</p>
+        <p>Адрес: г. Москва, ул. Садовая, 12</p>
+      </div>
+
+      <div class="footer__col">
+        <h3>Доставка</h3>
+        <p>Ежедневно с 8:00 до 22:00</p>
+        <p>Бесплатно при заказе от 1500 ₽</p>
+        <p>Оплата картой или наличными курьеру</p>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      © 2026 ФрутМаркет. Все права защищены.
+    </div>
+  </footer>
+
+  <script>
+    // Счётчик товаров в корзине
+    let cartItems = 0;
+    const cartCountEl = document.getElementById('cartCount');
+
+    function addToCart() {
+      cartItems++;
+      cartCountEl.textContent = cartItems;
+    }
+
+    // Открытие/закрытие мобильного меню
+    const burgerBtn = document.getElementById('burgerBtn');
+    const mainNav = document.getElementById('mainNav');
+
+    burgerBtn.addEventListener('click', () => {
+      mainNav.classList.toggle('open');
+    });
+
+    // Закрываем меню при клике на пункт навигации (мобильная версия)
+    mainNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mainNav.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>
